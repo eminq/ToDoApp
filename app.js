@@ -1,6 +1,6 @@
 const express = require('express');
 const ejs = require('ejs');
-const ejsMate = require('ejs-mate'); // this is for layouts partials ..
+const ejsMate = require('ejs-mate'); 
 const path = require('path');
 const port = 3000;
 const mongoose = require('mongoose');
@@ -36,7 +36,7 @@ const sessionConfig = {
 
 app.use(session(sessionConfig));
 
-app.engine('ejs', ejsMate);
+//app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({extended:true}));
@@ -59,6 +59,14 @@ const isLoggedIn = (req,res,next) => {
     next();
 }
 
+const isNotLoggedIn = (req,res,next) => {
+    if(req.isAuthenticated()){
+        req.flash('erorr', 'You are already logged in!');
+        return res.redirect('/tasks');
+    }
+    next();
+}
+
 app.use((req,res,next) => {
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
@@ -67,8 +75,8 @@ app.use((req,res,next) => {
 })
 
 
-// LOGIN
-app.get('/', (req, res) => {
+// HOME / LOGIN
+app.get('/', isNotLoggedIn, (req, res) => {
     res.render('home');
 })
 app.post('/login', passport.authenticate('local', {failureFlash:true, failureRedirect:'/'}), (req,res) => {
@@ -127,6 +135,9 @@ app.patch('/tasks/:id/:status', async(req,res) => {
     editedTask.save();
 })
 
+app.get('*', (req,res) => {
+    res.render('error');
+})
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}... `);

@@ -17,119 +17,120 @@
   </head>
 <body class="d-flex flex-column">
 
-    <section class="min-vh-100 gradient-custom-2">
-
-      <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
-        <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="navbar-nav">
-              <a class="nav-link" aria-current="page" href="/logout">Log out</a>
-            </div>
+  <section class="min-vh-100 gradient-custom-2">
+    <!-- navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <div class="navbar-nav">
+            <a class="nav-link" aria-current="page" href="/logout">Log out</a>
           </div>
         </div>
-      </nav>
+      </div>
+    </nav>
 
-        <div class="container py-5 h-100">
-          <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-md-12 col-xl-10">
-              <div class="card mask-custom">
-                <div class="card-body p-4 text-white">
-                  <div class="text-center pt-3 pb-2">
-                    <img src="../images/todoicon.png"
-                      alt="Check" width="100">
-                    <h2 class="my-4">Task List</h2>
-                  </div>
-                  <!-- form for NEW TASK -->
-                  <form action="/tasks" method="POST" class="d-flex justify-content-center align-items-center mb-4">
-                    <div class="form-outline flex-fill">
-                      <input type="text" id="task" name="task[text]" required class="form-control bg-transparent border-2 text-white" placeholder="New task.." maxlength="100" />
-                    </div>
-                    <select class="form-select w-25 border-info mx-2" aria-label="priority" name="task[priority]">
-                        <option selected value="high">High Priority</option>
-                        <option value="middle">Middle Priority</option>
-                        <option value="low">Low Priority</option>
-                      </select>
-                    <button type="submit" class="btn btn-info ms-2">Add</button>
-                  </form>
-                  <!-- form for NEW TASK -->
-
-                  <!-- ALL TASKS -->
-                  <table class="table text-white mb-0">
-                    <% if(tasks.length > 0) {%>
-                      <thead>
-                        <tr>
-                          <th scope="col">Task</th>
-                          <th scope="col">Priority</th>
-                          <th scope="col">Actions</th>
-                        </tr>
-                      </thead>
-                    <% } %>
-                    <tbody>
-                      <% for(let task of tasks) { %>
-                        <% if(task.author.equals(currentUser._id)){ %>
-                          <tr class="fw-normal <%- (task.status == 'done') ? "crossed" : " " %>" style="height: 10vh;" id="<%= task._id %>">
-                            <td class="align-middle " style="width: 40vw;">
-                              <span><%= task.text %></span>
-                            </td>
-                            <td class="align-middle">
-                              <% if(task.priority == 'high') {%>
-                                <h6 class="mb-0"><span class="badge bg-danger"><%= task.priority %> priority</span></h6>
-                              <% } else if(task.priority == 'middle') {%>
-                                <h6 class="mb-0"><span class="badge bg-warning"><%= task.priority %> priority</span></h6>
-                              <% } else {%>
-                                <h6 class="mb-0"><span class="badge bg-success"><%= task.priority %> priority</span></h6>
-                              <% } %>
-                              </td>
-                            <td class="align-middle">
-                              <a href="#!" data-mdb-toggle="tooltip" title="Done" onclick="crossTask( '<%= task._id %>', '<%= task.status %>' )"><i
-                                  class="fas fa-check fa-lg text-white me-2"></i></a>
-                              <a href="/tasks" data-mdb-toggle="tooltip" title="Remove" onclick="deleteTask( '<%= task._id %>' )"><i
-                                  class="fas fa-trash-alt fa-lg text-warning ms-2"></i></a>
-                            </td>
-                          </tr>
-                        <% } %>
-                      <% } %>
-                    </tbody>
-                  </table>
-    
-                </div>
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-md-12 col-xl-10">
+          <div class="card mask-custom">
+            <div class="card-body p-4 text-white">
+              
+              <div class="text-center pt-3 pb-2">
+                <img src="../images/todoicon.png"
+                  alt="Check" width="100">
+                <h2 class="my-4">Task List</h2>
               </div>
-      
+
+              <!-- form for NEW TASK -->
+              <form action="/tasks" method="POST" class="d-flex justify-content-center align-items-center mb-4">
+                <div class="form-outline flex-fill">
+                  <input type="text" id="task" name="task[text]" required class="form-control bg-transparent border-2 text-white" placeholder="New task.." maxlength="100" />
+                </div>
+                <select class="form-select w-25 border-info mx-2" aria-label="priority" name="task[priority]">
+                    <option selected value="high">High Priority</option>
+                    <option value="middle">Middle Priority</option>
+                    <option value="low">Low Priority</option>
+                  </select>
+                <button type="submit" class="btn btn-info ms-2">Add</button>
+              </form>
+              
+
+              <!-- ALL TASKS -->
+              <table class="table text-white mb-0">
+                <% if(tasks.length > 0) {%>
+                  <thead>
+                    <tr>
+                      <th scope="col">Task</th>
+                      <th scope="col">Priority</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                <% } %>
+                <tbody>
+                  <% for(let task of tasks) { %>
+                    <% if(task.author.equals(currentUser._id)){ %>
+                      <tr class="fw-normal <%- (task.status == 'done') ? "crossed" : " " %>" style="height: 10vh;" id="<%= task._id %>">
+                        <td class="align-middle " style="width: 40vw;">
+                          <span><%= task.text %></span>
+                        </td>
+                        <td class="align-middle">
+                          <% if(task.priority == 'high') {%>
+                            <h6 class="mb-0"><span class="badge bg-danger"><%= task.priority %> priority</span></h6>
+                          <% } else if(task.priority == 'middle') {%>
+                            <h6 class="mb-0"><span class="badge bg-warning"><%= task.priority %> priority</span></h6>
+                          <% } else {%>
+                            <h6 class="mb-0"><span class="badge bg-success"><%= task.priority %> priority</span></h6>
+                          <% } %>
+                          </td>
+                        <td class="align-middle">
+                          <a href="#!" data-mdb-toggle="tooltip" title="Done" onclick="crossTask( '<%= task._id %>', '<%= task.status %>' )"><i
+                              class="fas fa-check fa-lg text-white me-2"></i></a>
+                          <a href="/tasks" data-mdb-toggle="tooltip" title="Remove" onclick="deleteTask( '<%= task._id %>' )"><i
+                              class="fas fa-trash-alt fa-lg text-warning ms-2"></i></a>
+                        </td>
+                      </tr>
+                    <% } %>
+                  <% } %>
+                </tbody>
+              </table>
+
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </section>
     
-      <script>
-        const deleteTask = (id) => {
-          fetch(`/tasks/${id}`, {
-              method : 'DELETE'
-          })
-          .then(res => res.text()) 
-          .then(res => console.log(res))
-        }
+  <script>
+    const deleteTask = (id) => {
+      fetch(`/tasks/${id}`, {
+          method : 'DELETE'
+      })
+      .then(res => res.text()) 
+      .then(res => console.log(res))
+    }
 
-        const crossTask = (id, status) => {
-          const task = document.getElementById(`${id}`);
-          console.log(task);
-          task.classList.toggle('crossed');
+    const crossTask = (id, status) => {
+      const task = document.getElementById(`${id}`);
+      console.log(task);
+      task.classList.toggle('crossed');
+
+      fetch(`/tasks/${id}/${status}`, {
+          method : 'PATCH'
+      })
+      .then(res => res.text()) 
+      .then(res => console.log(res))
+    }
+  </script>
     
-          fetch(`/tasks/${id}/${status}`, {
-              method : 'PATCH'
-          })
-          .then(res => res.text()) 
-          .then(res => console.log(res))
-        }
-      </script>
-    
-    <!-- bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-     <!-- css -->
-    <link rel="stylesheet" href="/stylesheets/tasks.css">
+  <!-- bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <!-- css -->
+  <link rel="stylesheet" href="/stylesheets/tasks.css">
 </body>
 </html>
 
