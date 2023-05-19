@@ -12,8 +12,7 @@ const TaskSchema = new Schema({
         required:true
     },
     status:{
-        type:String,
-        enum:['done', 'notDone']
+        type:String
     },
     author: {
         type: Schema.Types.ObjectId,
